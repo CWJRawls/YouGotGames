@@ -14,14 +14,28 @@ class Game {
     
     var wDeck : Deck
     var bDeck : Deck
+    private var players: [Player]
+    private var usedCards : [UsedCard]?
     
+    init(players: [UUID], botCount: Int) {
+        
+    }
     
-    
+    func playCards(cards: UsedCard) {
+        
+        if let _ = usedCards {
+            usedCards?.append(cards)
+        } else {
+            usedCards = [cards]
+        }
+    }
     
 }
 
 /* 
+ ==========================================================================================================================================
   CODE FOR CREATING AND MAINTAINING PLAYERS
+ ==========================================================================================================================================
  */
 
 class Player {
@@ -31,33 +45,87 @@ class Player {
     var hand : Hand
     var isJudge : Bool
     var handWins : Int
+    var game : Game //a reference to the game object so that we can pass cards or get cards
     
-    init(name: String, hand: Hand, judge: Bool, wins: Int) {
+    required init(name: String, hand: Hand, judge: Bool, wins: Int, id: UUID, game: Game) {
         
+        self.name = name
+        
+        self.hand = hand
+        
+        isJudge = judge
+        
+        handWins = wins
+        
+        self.id = id
+        
+        self.game = game
+        
+    }
+    
+    func addCard(card: Int) {
+        
+        hand.addCard(card: card)
+        
+    }
+    
+    //method for playing white cards, array parameter for hands where multiple cards need to be played
+    func playCard(cardIndex: [Int]) {
+        let play = UsedCard(cardNum: cardIndex, player: id)
+        
+        game.playCards(cards: play)
+        
+        for i in 0...cardIndex.count {
+            hand.removeCard(index: cardIndex[i])
+        }
     }
     
 }
 
+//sub class of player for computer player that fills out small games
+class Bot : Player {
+    
+}
+
 /* 
+ ==========================================================================================================================================
   CODE FOR CREATING AND MAINTAINING PLAYER HANDS
+ ==========================================================================================================================================
  */
 
 class Hand {
     var cards : [Int] = [Int]()
     let maxHandSize : Int = 7
     
+    func addCard(card: Int) {
+        if cards.count < maxHandSize {
+            cards.append(card)
+        }
+    }
+    
+    func removeCard(index: Int) {
+        if index >= 0 && index < cards.count {
+            cards.remove(at: index)
+        }
+    }
+    
 }
 
+
+
+//structure to represent white cards that have been played by non-judges
 struct UsedCard {
     //which card it is
-    var cardNum : [Int]
+    var cardNum : [Int] //intentionally left an array in the case of a multi card play
     
     //unique identifier of who played it
     var player : UUID
 }
 
 /*
+ ==========================================================================================================================================
   CODE FOR CREATING AND MAINTING CARD DECKS
+ ==========================================================================================================================================
  */
 
 
