@@ -16,11 +16,59 @@ class Game {
     var bDeck : Deck
     private var players: [Player]
     private var usedCards : [UsedCard]?
+    private var judgeIdx : Int
+    private var currentPlayer : Int
     
-    init(players: [UUID], botCount: Int) {
+    //initializer for a new game
+    init(humanPlayers: [UUID], botCount: Int) {
+        
+        players = [Player]()
+        
+        for (index,p) in humanPlayers.enumerated() {
+            players.append(Player(id: p, name: "Player \(index)"))
+        }
+        
+        for i in 0...botCount {
+            players.append(Bot(id: UUID(uuidString: "11111111-1111-1111-1111-11111111111\(i)")!, name: "Bot \(i)"))
+        }
+        
+        //assign the creator to be the first judge
+        judgeIdx = 0
+        currentPlayer = 1
+        
+        wDeck = Deck(type: DeckType.white, max: 460)
+        bDeck = Deck(type: DeckType.black, max: 90)
         
     }
     
+    //initializer for game in progress
+    init(players: [Player], wCards: [Int], bCards: [Int], uCards: [UsedCard]?, cPlayer: Int, jPlayer: Int) {
+    
+        wDeck = Deck(type: DeckType.white, cards: wCards)
+        bDeck = Deck(type: DeckType.black, cards: bCards)
+        
+        self.players = players
+        
+        usedCards = uCards
+        
+        currentPlayer = cPlayer
+        
+        judgeIdx = jPlayer
+        
+    }
+    
+    
+    //function for passing reference to the game object to each of the players so that they can play their cards
+    func passGameToPlayers() {
+        
+        for player in players {
+            player.game = self
+        }
+    }
+    
+    
+    
+    //called from the player class to use cards
     func playCards(cards: UsedCard) {
         
         if let _ = usedCards {
@@ -28,6 +76,26 @@ class Game {
         } else {
             usedCards = [cards]
         }
+    }
+    
+    //method to check if the current player is the current device
+    func isCurrentPlayer(id: UUID) -> Bool {
+        if players[currentPlayer].id == id {
+            return true
+        }
+        
+        return false
+    }
+    
+    //after a player has taken their turn, call this to check if the next player is a bot
+    func checkNextPlayer() {
+        //if they are a bot, have them take their turn
+        if players[currentPlayer].isBot {
+            
+        } else {
+            //package the current state as a url and pass it along.
+        }
+        
     }
     
 }
@@ -45,9 +113,22 @@ class Player {
     var hand : Hand
     var isJudge : Bool
     var handWins : Int
-    var game : Game //a reference to the game object so that we can pass cards or get cards
+    var game : Game? //a reference to the game object so that we can pass cards or get cards
+    var isBot = false
     
-    required init(name: String, hand: Hand, judge: Bool, wins: Int, id: UUID, game: Game) {
+    //initializer for new player
+    init(id: UUID, name: String)
+    {
+        self.id = id
+        self.name = name
+        hand = Hand()
+        isJudge = false
+        handWins = 0
+        
+    }
+    
+    //initializer for a player in a game in progress
+    required init(name: String, hand: Hand, judge: Bool, wins: Int, id: UUID) {
         
         self.name = name
         
@@ -58,8 +139,6 @@ class Player {
         handWins = wins
         
         self.id = id
-        
-        self.game = game
         
     }
     
@@ -73,7 +152,7 @@ class Player {
     func playCard(cardIndex: [Int]) {
         let play = UsedCard(cardNum: cardIndex, player: id)
         
-        game.playCards(cards: play)
+        game?.playCards(cards: play)
         
         for i in 0...cardIndex.count {
             hand.removeCard(index: cardIndex[i])
@@ -84,6 +163,20 @@ class Player {
 
 //sub class of player for computer player that fills out small games
 class Bot : Player {
+
+    
+    required init(name: String, hand: Hand, judge: Bool, wins: Int, id: UUID) {
+        super.init(name: name, hand: hand, judge: judge, wins: wins, id: id)
+        
+        isBot = true
+    }
+    
+    //initializer for new player
+    override init(id: UUID, name: String)
+    {
+        super.init(id: id, name: name)
+        isBot = true
+    }
     
 }
 
@@ -96,6 +189,16 @@ class Bot : Player {
 class Hand {
     var cards : [Int] = [Int]()
     let maxHandSize : Int = 7
+    
+    //default initializer
+    init() {} //just waits for cards to be added
+    
+    //initializer for existing hand
+    init(myCards: [Int]) {
+        for card in myCards {
+            cards.append(card)
+        }
+    }
     
     func addCard(card: Int) {
         if cards.count < maxHandSize {
