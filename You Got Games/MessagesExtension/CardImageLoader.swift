@@ -126,4 +126,13 @@ class CardLoader {
             }
         }
     }
+    
+    func getCardsToPlay(cardIdx: Int) -> Int {
+        
+        if cardIdx >= 0 && cardIdx < cardsPlayed.count {
+            return cardsPlayed[cardIdx]
+        }
+        
+        return 1
+    }
 }

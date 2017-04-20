@@ -120,6 +120,7 @@
 			children = (
 				BFC695261EA5B7100049A44E /* BlackCardNames.txt */,
 				BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */,
+				02C378931EA8820A005ADDFB /* BlackCardAmount.txt */,
 				02C378851EA583EA005ADDFB /* CAH_Images */,
 				BF34CAC31EA47ED5005A2C48 /* MessagesViewController.swift */,
 				BF34CAC51EA47ED5005A2C48 /* MainInterface.storyboard */,
@@ -127,7 +128,6 @@
 				02C3788D1EA8691E005ADDFB /* GameViewController.swift */,
 				02C3788F1EA86A2E005ADDFB /* Card.swift */,
 				02C378911EA86BCE005ADDFB /* CardImageLoader.swift */,
-				02C378931EA8820A005ADDFB /* BlackCardAmount.txt */,
 				BF34CAC81EA47ED5005A2C48 /* Assets.xcassets */,
 				BF34CACA1EA47ED5005A2C48 /* Info.plist */,
 			);
