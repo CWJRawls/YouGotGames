@@ -7,5 +7,15 @@
 //
 
 import Foundation
-import UIKit
 import SpriteKit
+import UIKit
+
+class GameViewController : UIViewController {
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+    }
+}

@@ -18,6 +18,8 @@ class Game {
     private var usedCards : [UsedCard]?
     private var judgeIdx : Int
     private var currentPlayer : Int
+    private var blackCard : Int
+    private var roundHistory : GameHistory?
     
     //initializer for a new game
     init(humanPlayers: [UUID], botCount: Int) {
@@ -39,13 +41,15 @@ class Game {
         wDeck = Deck(type: DeckType.white, max: 460)
         bDeck = Deck(type: DeckType.black, max: 90)
         
+        blackCard = bDeck.drawCard()
+        
     }
     
     //initializer for game in progress
-    init(players: [Player], wCards: [Int], bCards: [Int], uCards: [UsedCard]?, cPlayer: Int, jPlayer: Int) {
+    init(players: [Player], wCards: [Int], bCards: [Int], uCards: [UsedCard]?, cPlayer: Int, jPlayer: Int, currentGoal: Int, history: GameHistory?) {
     
-        wDeck = Deck(type: DeckType.white, cards: wCards)
-        bDeck = Deck(type: DeckType.black, cards: bCards)
+        wDeck = Deck(type: DeckType.white, cards: wCards, dCards: nil)
+        bDeck = Deck(type: DeckType.black, cards: bCards, dCards: nil)
         
         self.players = players
         
@@ -54,6 +58,12 @@ class Game {
         currentPlayer = cPlayer
         
         judgeIdx = jPlayer
+        
+        blackCard = currentGoal
+        
+        if let h = history {
+            roundHistory = h
+        }
         
     }
     
@@ -76,6 +86,12 @@ class Game {
         } else {
             usedCards = [cards]
         }
+        
+        let playedCards = cards.cardNum
+        
+        //be sure to add to the discard pile when played
+        wDeck.discard(forDiscard: playedCards)
+        
     }
     
     //method to check if the current player is the current device
@@ -98,7 +114,140 @@ class Game {
         
     }
     
+    func prepareURL() -> URL {
+        
+        //what will be compiled and passed on
+        var components = URLComponents()
+        
+        //header, not going to test the host is real
+        components.scheme = "http"
+        components.host = "www.werehorrible.com"
+        
+        //used to store the game state
+        var queryItems = [URLQueryItem]()
+        
+        //first get the decks squared away
+        let wDeckType = URLQueryItem(name: "white_deck_type", value: wDeck.getTypeString())
+        let wDeckItem = URLQueryItem(name: "white_deck", value: wDeck.getCardString())
+        let wDeckDiscard = URLQueryItem(name: "white_deck_discard", value: wDeck.getDiscardString())
+        queryItems.append(wDeckType)
+        queryItems.append(wDeckItem)
+        queryItems.append(wDeckDiscard)
+        
+        let bDeckType = URLQueryItem(name: "black_deck_type", value: bDeck.getTypeString())
+        let bDeckItem = URLQueryItem(name: "black_deck", value: bDeck.getCardString())
+        queryItems.append(bDeckType)
+        queryItems.append(bDeckItem)
+        
+        //get the judge index
+        let judgePlayer = URLQueryItem(name: "judge_index", value: "\(judgeIdx)")
+        queryItems.append(judgePlayer)
+        
+        //get the current player index
+        let currentPlayer = URLQueryItem(name: "current_player", value: "\(self.currentPlayer)")
+        queryItems.append(currentPlayer)
+        
+        //get the current black card
+        let myBlackCard = URLQueryItem(name: "black_card", value: "\(blackCard)")
+        queryItems.append(myBlackCard)
+        
+        //get any white cards that have been played so far this round
+        if let playedCards = usedCards {
+            
+            for (index, element) in playedCards.enumerated() {
+                let name = "play\(index)"
+                let uCard = URLQueryItem(name: name, value: element.getCardString())
+                let uPlayer = URLQueryItem(name: "card_player", value: element.getPlayerString())
+                
+                queryItems.append(uCard)
+                queryItems.append(uPlayer)
+            }
+            
+        }
+        
+        //get if there is anything history to bre preserved
+        if let history = roundHistory {
+            
+        }
+        
+        
+        
+    }
+    
 }
+
+/*
+ Game History Class
+ */
+
+class GameHistory {
+    
+    var playersToShow : [UUID]?
+    var blackCard : Int
+    var usedCards : [UsedCard]
+    
+    init(players: [UUID], bCard: Int, cards: [UsedCard]){
+        playersToShow = players
+        blackCard = bCard
+        usedCards = cards
+    }
+    
+    func willShowHistoryToPlayer(id: UUID) -> Bool {
+        if let players = playersToShow {
+            
+            for player in players {
+                if id == player {
+                    return true
+                }
+            }
+            
+        }
+        
+        return false
+    }
+    
+    func hasPlayersToShow() -> Bool {
+        if let players = playersToShow {
+            if players.count > 0 {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func hasShownPlayer(id: UUID) {
+        if let players = playersToShow {
+            for (index, p) in players.enumerated() {
+                if p == id {
+                    playersToShow?.remove(at: index)
+                }
+            }
+        }
+    }
+    
+    func getBlackCardString() -> String {
+        return "\(blackCard)"
+    }
+    
+    func getPlayersString() -> String {
+        var str : String = ""
+        
+        for (index, player) in (playersToShow?.enumerated())! {
+            
+            if index < (playersToShow?.count)! - 1 {
+                str += player.uuidString
+                str += "+"
+            } else {
+                str += player.uuidString
+            }
+        }
+        
+        return str
+    }
+    
+}
+
 
 /* 
  ==========================================================================================================================================
@@ -159,6 +308,22 @@ class Player {
         }
     }
     
+    func getPlayerTypeString() -> String {
+        return "player"
+    }
+    
+    func getPlayerIDString() -> String {
+        return id.uuidString
+    }
+    
+    func getHandString() -> String {
+        return hand.getContentString()
+    }
+    
+    func getRoundWinsString() -> String {
+        return "\(handWins)"
+    }
+    
 }
 
 //sub class of player for computer player that fills out small games
@@ -176,6 +341,51 @@ class Bot : Player {
     {
         super.init(id: id, name: name)
         isBot = true
+    }
+    
+    func botPlayCards(count: Int) -> UsedCard {
+        
+        if count == 1 {
+            let card  = Int(arc4random_uniform(UInt32(hand.cards.count)))
+            
+            let uCard = UsedCard(cardNum: [hand.cards[card]], player: self.id)
+            
+            hand.removeCard(index: card)
+            
+            return uCard
+        }
+        else {
+         
+            //shuffle the cards in the hand
+            for (index, _) in hand.cards.enumerated() {
+                let shift = Int(arc4random_uniform(7)) - 3
+                
+                let oldCard = hand.cards[index]
+                
+                let newPos = (index + shift) % 7
+                
+                hand.cards[index] = hand.cards[newPos]
+                hand.cards[newPos] = oldCard
+            }
+            
+            var cards = [Int]()
+            
+            //use the first n cards
+            for _ in 0...count {
+                cards.append(hand.cards[0])
+                hand.removeCard(index: 0)
+            }
+            
+            let uCard = UsedCard(cardNum: cards, player: self.id)
+            
+            return uCard
+        }
+        
+        
+    }
+    
+    override func getPlayerTypeString() -> String {
+        return "bot"
     }
     
 }
@@ -212,17 +422,55 @@ class Hand {
         }
     }
     
+    func getContentString() -> String {
+        var str : String = ""
+        
+        for (index, card) in cards.enumerated() {
+            if index < cards.count - 1 {
+                str += "\(card)-"
+            } else {
+                str += "\(card)"
+            }
+        }
+        
+        return str
+    }
+    
 }
 
 
 
 //structure to represent white cards that have been played by non-judges
-struct UsedCard {
+class UsedCard {
     //which card it is
     var cardNum : [Int] //intentionally left an array in the case of a multi card play
     
     //unique identifier of who played it
     var player : UUID
+    
+    init(cardNum: [Int], player: UUID) {
+        self.cardNum = cardNum
+        self.player = player
+    }
+    
+    func getCardString() -> String {
+        
+        var str : String = ""
+        
+        for (index, card) in cardNum.enumerated() {
+            if index < cardNum.count - 1 {
+                str += "\(card)-"
+            } else {
+                str += "\(card)"
+            }
+        }
+        
+        return str
+    }
+    
+    func getPlayerString() -> String {
+        return player.uuidString
+    }
 }
 
 /*
@@ -244,10 +492,13 @@ class Deck {
     
     
     //creates the deck from URL Data
-    init(type: DeckType, cards: [Int])
+    init(type: DeckType, cards: [Int], dCards: [Int]?)
     {
         self.type = type;
         self.cards = cards
+        if let discards = dCards {
+            discard.append(contentsOf: discards)
+        }
     }
     
     //creates a new deck of the specified type with the specified number of cards
@@ -345,5 +596,51 @@ class Deck {
             cards[Int(newPos)] = temp
         }
         
+    }
+    
+    func discard(forDiscard: [Int]) {
+        
+        for card in forDiscard {
+            discard.append(card)
+        }
+        
+    }
+    
+    func getTypeString() -> String {
+        return type.rawValue
+    }
+    
+    func getCardString() -> String {
+        var str : String = ""
+        
+        for (index, card) in cards.enumerated() {
+            if index < cards.count - 1 {
+                str += "\(card)-"
+            } else {
+                str += "\(card)"
+            }
+        }
+        
+        return str
+    }
+    
+    func getDiscardString() -> String {
+        if discard.count > 0 {
+            
+            var str : String = ""
+
+            for (index, card) in discard.enumerated() {
+                if index < cards.count - 1 {
+                    str += "\(card)-"
+                } else {
+                    str += "\(card)"
+                }
+            }
+            
+            return str
+            
+        } else {
+            return "-1"
+        }
     }
 }
