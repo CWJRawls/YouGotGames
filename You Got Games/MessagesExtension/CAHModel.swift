@@ -30,8 +30,11 @@ class Game {
             players.append(Player(id: p, name: "Player \(index)"))
         }
         
-        for i in 0...botCount {
-            players.append(Bot(id: UUID(uuidString: "11111111-1111-1111-1111-11111111111\(i)")!, name: "Bot \(i)"))
+        //make sure only to execute the loop in the case that there are bots in the game
+        if botCount > 0 {
+            for i in 0...botCount {
+                players.append(Bot(id: UUID(uuidString: "11111111-1111-1111-1111-11111111111\(i)")!, name: "Bot \(i)"))
+            }
         }
         
         //assign the creator to be the first judge
@@ -42,6 +45,13 @@ class Game {
         bDeck = Deck(type: DeckType.black, max: 90)
         
         blackCard = bDeck.drawCard()
+        
+        //deal to each player
+        for player in players {
+            for _ in 0...Hand.maxHandSize {
+                player.addCard(card: wDeck.drawCard())
+            }
+        }
         
     }
     
@@ -121,7 +131,7 @@ class Game {
         
         //header, not going to test the host is real
         components.scheme = "http"
-        components.host = "www.werehorrible.com"
+        components.host = "www.yougotgames.com"
         
         //used to store the game state
         var queryItems = [URLQueryItem]()
@@ -154,24 +164,76 @@ class Game {
         //get any white cards that have been played so far this round
         if let playedCards = usedCards {
             
-            for (index, element) in playedCards.enumerated() {
-                let name = "play\(index)"
-                let uCard = URLQueryItem(name: name, value: element.getCardString())
+            for element in playedCards {
+                let usedCardBegin = URLQueryItem(name: "usedCardBegin", value: "1")
+                let uCard = URLQueryItem(name: "play", value: element.getCardString())
                 let uPlayer = URLQueryItem(name: "card_player", value: element.getPlayerString())
+                let usedCardEnd = URLQueryItem(name: "usedCardEnd", value: "1")
                 
+                queryItems.append(usedCardBegin)
                 queryItems.append(uCard)
                 queryItems.append(uPlayer)
+                queryItems.append(usedCardEnd)
             }
             
         }
         
-        //get if there is anything history to bre preserved
+        //get if there is anything history to be preserved
         if let history = roundHistory {
             
+            let historyBegin = URLQueryItem(name: "historyBegin", value: "1")
+            let players = URLQueryItem(name: "players", value: history.getPlayersString())
+            let histBCard = URLQueryItem(name: "blackCard", value: history.getBlackCardString())
+            
+            queryItems.append(historyBegin)
+            queryItems.append(players)
+            queryItems.append(histBCard)
+            
+            for ucard in history.usedCards {
+               
+                let usedCardBegin = URLQueryItem(name: "usedCardBegin", value: "1")
+                let uCard = URLQueryItem(name: "play", value: ucard.getCardString())
+                let uPlayer = URLQueryItem(name: "card_player", value: ucard.getPlayerString())
+                let usedCardEnd = URLQueryItem(name: "usedCardEnd", value: "1")
+                
+                queryItems.append(usedCardBegin)
+                queryItems.append(uCard)
+                queryItems.append(uPlayer)
+                queryItems.append(usedCardEnd)
+            }
+            
+            let historyEnd = URLQueryItem(name: "historyEnd", value: "1")
+            
+            queryItems.append(historyEnd)
         }
         
+        //begin writing player values
+        for player in players {
+            
+            let playerBegin = URLQueryItem(name: "playerStart", value: "1")
+            let name = URLQueryItem(name: "name", value: player.name)
+            let id = URLQueryItem(name: "id", value: player.getPlayerIDString())
+            let hand = URLQueryItem(name: "hand", value: player.getHandString())
+            let wins = URLQueryItem(name: "wins", value: player.getRoundWinsString())
+            let type = URLQueryItem(name: "type", value: player.getPlayerTypeString())
+            let playerEnd = URLQueryItem(name: "playerEnd", value: "1")
+            
+            queryItems.append(playerBegin)
+            queryItems.append(name)
+            queryItems.append(id)
+            queryItems.append(hand)
+            queryItems.append(wins)
+            queryItems.append(type)
+            queryItems.append(playerEnd)
+        }
         
+        //append all of our items to the components object
+        components.queryItems?.append(contentsOf: queryItems)
         
+        //then get the url to output
+        let outputURL : URL = components.url!
+        
+        return outputURL
     }
     
 }
@@ -398,7 +460,7 @@ class Bot : Player {
 
 class Hand {
     var cards : [Int] = [Int]()
-    let maxHandSize : Int = 7
+    static let maxHandSize : Int = 7
     
     //default initializer
     init() {} //just waits for cards to be added
@@ -411,7 +473,7 @@ class Hand {
     }
     
     func addCard(card: Int) {
-        if cards.count < maxHandSize {
+        if cards.count < Hand.maxHandSize {
             cards.append(card)
         }
     }
@@ -440,7 +502,7 @@ class Hand {
 
 
 
-//structure to represent white cards that have been played by non-judges
+//class to represent white cards that have been played by non-judges
 class UsedCard {
     //which card it is
     var cardNum : [Int] //intentionally left an array in the case of a multi card play
