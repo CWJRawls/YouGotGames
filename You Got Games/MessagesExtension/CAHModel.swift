@@ -56,10 +56,10 @@ class Game {
     }
     
     //initializer for game in progress
-    init(players: [Player], wCards: [Int], bCards: [Int], uCards: [UsedCard]?, cPlayer: Int, jPlayer: Int, currentGoal: Int, history: GameHistory?) {
+    init(players: [Player], wCards: Deck, bCards: Deck, uCards: [UsedCard]?, cPlayer: Int, jPlayer: Int, currentGoal: Int, history: GameHistory?) {
     
-        wDeck = Deck(type: DeckType.white, cards: wCards, dCards: nil)
-        bDeck = Deck(type: DeckType.black, cards: bCards, dCards: nil)
+        wDeck = wCards
+        bDeck = bCards
         
         self.players = players
         
@@ -124,6 +124,11 @@ class Game {
         
     }
     
+    //used by in order to get the player array
+    func getPlayers() ->[Player] {
+        return players
+    }
+    
     func prepareURL() -> URL {
         
         //what will be compiled and passed on
@@ -137,17 +142,25 @@ class Game {
         var queryItems = [URLQueryItem]()
         
         //first get the decks squared away
-        let wDeckType = URLQueryItem(name: "white_deck_type", value: wDeck.getTypeString())
-        let wDeckItem = URLQueryItem(name: "white_deck", value: wDeck.getCardString())
-        let wDeckDiscard = URLQueryItem(name: "white_deck_discard", value: wDeck.getDiscardString())
+        let deckBegin = URLQueryItem(name: "deckBegin", value: "1")
+        let deckEnd = URLQueryItem(name: "deckEnd", value: "1")
+        let wDeckType = URLQueryItem(name: "deck_type", value: wDeck.getTypeString())
+        let wDeckItem = URLQueryItem(name: "deck", value: wDeck.getCardString())
+        let wDeckDiscard = URLQueryItem(name: "discard", value: wDeck.getDiscardString())
+        
+        queryItems.append(deckBegin)
         queryItems.append(wDeckType)
         queryItems.append(wDeckItem)
         queryItems.append(wDeckDiscard)
+        queryItems.append(deckEnd)
         
-        let bDeckType = URLQueryItem(name: "black_deck_type", value: bDeck.getTypeString())
-        let bDeckItem = URLQueryItem(name: "black_deck", value: bDeck.getCardString())
+        let bDeckType = URLQueryItem(name: "deck_type", value: bDeck.getTypeString())
+        let bDeckItem = URLQueryItem(name: "deck", value: bDeck.getCardString())
+        
+        queryItems.append(deckBegin)
         queryItems.append(bDeckType)
         queryItems.append(bDeckItem)
+        queryItems.append(deckEnd)
         
         //get the judge index
         let judgePlayer = URLQueryItem(name: "judge_index", value: "\(judgeIdx)")
@@ -327,6 +340,15 @@ class Player {
     var game : Game? //a reference to the game object so that we can pass cards or get cards
     var isBot = false
     
+    //default so that items can be added piecemeal
+    init() {
+        name = "default"
+        hand = Hand()
+        isJudge = false
+        handWins = 0
+        id = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+    }
+    
     //initializer for new player
     init(id: UUID, name: String)
     {
@@ -395,6 +417,11 @@ class Bot : Player {
     required init(name: String, hand: Hand, judge: Bool, wins: Int, id: UUID) {
         super.init(name: name, hand: hand, judge: judge, wins: wins, id: id)
         
+        isBot = true
+    }
+    
+    override init() {
+        super.init()
         isBot = true
     }
     

@@ -19,6 +19,7 @@
 		BF34CAC41EA47ED5005A2C48 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34CAC31EA47ED5005A2C48 /* MessagesViewController.swift */; };
 		BF34CAC71EA47ED5005A2C48 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF34CAC51EA47ED5005A2C48 /* MainInterface.storyboard */; };
 		BF34CAC91EA47ED5005A2C48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF34CAC81EA47ED5005A2C48 /* Assets.xcassets */; };
+		BFBA4D801EB5E1F3004E5D05 /* URLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBA4D7F1EB5E1F3004E5D05 /* URLDecoder.swift */; };
 		BFC695271EA5B7100049A44E /* BlackCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC695261EA5B7100049A44E /* BlackCardNames.txt */; };
 		BFC6952B1EA5B8120049A44E /* WhiteCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */; };
 		BFC6952D1EA5D9390049A44E /* CAHModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC6952C1EA5D9390049A44E /* CAHModel.swift */; };
@@ -64,6 +65,7 @@
 		BF34CAC61EA47ED5005A2C48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		BF34CAC81EA47ED5005A2C48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF34CACA1EA47ED5005A2C48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFBA4D7F1EB5E1F3004E5D05 /* URLDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLDecoder.swift; sourceTree = "<group>"; };
 		BFC695261EA5B7100049A44E /* BlackCardNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BlackCardNames.txt; path = "../You Got Games/BlackCardNames.txt"; sourceTree = "<group>"; };
 		BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = WhiteCardNames.txt; path = ../WhiteCardNames.txt; sourceTree = "<group>"; };
 		BFC6952C1EA5D9390049A44E /* CAHModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAHModel.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				BF34CAC31EA47ED5005A2C48 /* MessagesViewController.swift */,
 				BF34CAC51EA47ED5005A2C48 /* MainInterface.storyboard */,
 				BFC6952C1EA5D9390049A44E /* CAHModel.swift */,
+				BFBA4D7F1EB5E1F3004E5D05 /* URLDecoder.swift */,
 				02C3788D1EA8691E005ADDFB /* GameViewController.swift */,
 				02C3788F1EA86A2E005ADDFB /* Card.swift */,
 				02C378911EA86BCE005ADDFB /* CardImageLoader.swift */,
@@ -247,6 +250,7 @@
 			files = (
 				BFC6952D1EA5D9390049A44E /* CAHModel.swift in Sources */,
 				02C3788E1EA8691E005ADDFB /* GameViewController.swift in Sources */,
+				BFBA4D801EB5E1F3004E5D05 /* URLDecoder.swift in Sources */,
 				BF34CAC41EA47ED5005A2C48 /* MessagesViewController.swift in Sources */,
 				02C378921EA86BCE005ADDFB /* CardImageLoader.swift in Sources */,
 				02C378901EA86A2E005ADDFB /* Card.swift in Sources */,
