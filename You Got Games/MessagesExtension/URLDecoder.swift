@@ -273,7 +273,7 @@ class URLDecoder {
         return false
     }
     
-    func getGame() -> Game {
+    func getGame() -> Game? {
         
         //only temporary
         return game!

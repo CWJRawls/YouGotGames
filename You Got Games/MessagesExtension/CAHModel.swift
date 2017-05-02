@@ -21,6 +21,8 @@ class Game {
     private var blackCard : Int
     private var roundHistory : GameHistory?
     
+    static let maxWins : Int = 10
+    
     //initializer for a new game
     init(humanPlayers: [UUID], botCount: Int) {
         

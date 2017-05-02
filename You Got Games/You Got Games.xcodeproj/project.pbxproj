@@ -23,6 +23,7 @@
 		BFC695271EA5B7100049A44E /* BlackCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC695261EA5B7100049A44E /* BlackCardNames.txt */; };
 		BFC6952B1EA5B8120049A44E /* WhiteCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */; };
 		BFC6952D1EA5D9390049A44E /* CAHModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC6952C1EA5D9390049A44E /* CAHModel.swift */; };
+		BFC7E6731EB87A4300F70550 /* Backgrounds in Resources */ = {isa = PBXBuildFile; fileRef = BFC7E6721EB87A4300F70550 /* Backgrounds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		BFC695261EA5B7100049A44E /* BlackCardNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BlackCardNames.txt; path = "../You Got Games/BlackCardNames.txt"; sourceTree = "<group>"; };
 		BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = WhiteCardNames.txt; path = ../WhiteCardNames.txt; sourceTree = "<group>"; };
 		BFC6952C1EA5D9390049A44E /* CAHModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAHModel.swift; sourceTree = "<group>"; };
+		BFC7E6721EB87A4300F70550 /* Backgrounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Backgrounds; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				BFC695261EA5B7100049A44E /* BlackCardNames.txt */,
 				BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */,
 				02C378931EA8820A005ADDFB /* BlackCardAmount.txt */,
+				BFC7E6721EB87A4300F70550 /* Backgrounds */,
 				02C3789B1EB1734E005ADDFB /* CardSelectors */,
 				02C378851EA583EA005ADDFB /* CAH_Images */,
 				BF34CAC31EA47ED5005A2C48 /* MessagesViewController.swift */,
@@ -238,6 +241,7 @@
 				BF34CAC71EA47ED5005A2C48 /* MainInterface.storyboard in Resources */,
 				02C378941EA8820A005ADDFB /* BlackCardAmount.txt in Resources */,
 				02C3789C1EB1734E005ADDFB /* CardSelectors in Resources */,
+				BFC7E6731EB87A4300F70550 /* Backgrounds in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

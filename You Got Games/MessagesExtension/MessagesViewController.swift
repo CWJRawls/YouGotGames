@@ -11,9 +11,38 @@ import Messages
 
 class MessagesViewController: MSMessagesAppViewController {
     
+    var minimumBots : Int = 0
+    let maximumBots : Int = 8
+    var botCount : Int = 0
+    
+    @IBOutlet var botLabel : UILabel!
+    
+    @IBAction func incrementBots(_ sender: UIButton) {
+        if botCount < maximumBots {
+            botCount += 1
+            
+            botLabel.text = "Bots: \(botCount)"
+        }
+    }
+    
+    @IBAction func decrementBots(_ sender: UIButton) {
+        if botCount > minimumBots {
+            botCount -= 1
+            
+            botLabel.text = "Bots: \(botCount)"
+        }
+    }
+    
+    @IBAction func createGame(_ sender: UIButton) {
+        Swift.print("will create new game")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -28,6 +57,31 @@ class MessagesViewController: MSMessagesAppViewController {
         // This will happen when the extension is about to present UI.
         
         // Use this method to configure the extension and restore previously stored state.
+        super.willBecomeActive(with: conversation)
+        
+        //guard let conversation = activeConversation else {fatalError("No Active Conversation")}
+        /*
+        let myID = conversation.localParticipantIdentifier
+        
+        let remoteIDs = conversation.remoteParticipantIdentifiers
+        
+        var allIDs = [UUID]()
+        
+        allIDs.append(myID)
+        allIDs.append(contentsOf: remoteIDs)
+        
+        botLabel.text = "Bots: \(botCount)"
+        
+        if allIDs.count < 3 {
+            if botCount < 1 {
+                botCount = 1
+                botLabel.text = "Bots: 1"
+            }
+            
+            minimumBots = 1
+        } */
+        
+        presentViewController(for: conversation, with: presentationStyle)
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -61,12 +115,71 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
+        super.willTransition(to: presentationStyle)
+        
+        Swift.print("will transition")
+        
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
+        
+        super.didTransition(to: presentationStyle)
+        
+        guard let conversation = activeConversation else { fatalError("Expected active conversation") }
+        
+        Swift.print("1")
+        
+        presentViewController(for: conversation, with: presentationStyle)
+        
+    }
+    
+    private func presentViewController(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
+        
+        //if we are making a new game, then don't do anything
+        if presentationStyle != .compact {
+            
+            let message = conversation.selectedMessage
+            
+            let gameURL = message?.url
+            
+            if let url = gameURL {
+                
+                let decoder = URLDecoder(url: url)
+                
+                decoder.decode()
+                
+                guard let game = decoder.getGame() else {fatalError("Corrupt Game State URL")}
+                
+                
+            }
+            
+        }
+        else { //get who all is a part of the conversation
+            
+            let myID = conversation.localParticipantIdentifier
+            
+            let remoteIDs = conversation.remoteParticipantIdentifiers
+            
+            var allIDs = [UUID]()
+            
+            allIDs.append(myID)
+            allIDs.append(contentsOf: remoteIDs)
+            
+            //set the bot label and ensure that at least 3 players (including bots) are present
+            botLabel.text = "Bots: \(botCount)"
+            
+            if allIDs.count < 3 {
+                if botCount < 1 {
+                    botCount = 1
+                    botLabel.text = "Bots: 1"
+                }
+                
+                minimumBots = 1
+            }
+        }
     }
 
 }
