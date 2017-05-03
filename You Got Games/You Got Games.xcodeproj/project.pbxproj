@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02C378861EA583EA005ADDFB /* CAH_Images in Resources */ = {isa = PBXBuildFile; fileRef = 02C378851EA583EA005ADDFB /* CAH_Images */; };
 		02C3788E1EA8691E005ADDFB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C3788D1EA8691E005ADDFB /* GameViewController.swift */; };
 		02C378901EA86A2E005ADDFB /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C3788F1EA86A2E005ADDFB /* Card.swift */; };
 		02C378921EA86BCE005ADDFB /* CardImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C378911EA86BCE005ADDFB /* CardImageLoader.swift */; };
@@ -27,6 +26,7 @@
 		BFC7E6741EB95AE400F70550 /* Backgrounds in Resources */ = {isa = PBXBuildFile; fileRef = BFC7E6721EB87A4300F70550 /* Backgrounds */; };
 		BFC7E6751EB95AE900F70550 /* CardSelectors in Resources */ = {isa = PBXBuildFile; fileRef = 02C3789B1EB1734E005ADDFB /* CardSelectors */; };
 		BFC7E6761EB95AEF00F70550 /* BlackCardAmount.txt in Resources */ = {isa = PBXBuildFile; fileRef = 02C378931EA8820A005ADDFB /* BlackCardAmount.txt */; };
+		BFC7E6781EB9646C00F70550 /* WaitingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC7E6771EB9646C00F70550 /* WaitingScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		02C378851EA583EA005ADDFB /* CAH_Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CAH_Images; path = "../You Got Games/CAH_Images"; sourceTree = "<group>"; };
 		02C3788D1EA8691E005ADDFB /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		02C3788F1EA86A2E005ADDFB /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		02C378911EA86BCE005ADDFB /* CardImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardImageLoader.swift; sourceTree = "<group>"; };
@@ -74,6 +73,7 @@
 		BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = WhiteCardNames.txt; path = ../WhiteCardNames.txt; sourceTree = "<group>"; };
 		BFC6952C1EA5D9390049A44E /* CAHModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAHModel.swift; sourceTree = "<group>"; };
 		BFC7E6721EB87A4300F70550 /* Backgrounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Backgrounds; sourceTree = "<group>"; };
+		BFC7E6771EB9646C00F70550 /* WaitingScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,16 +130,16 @@
 				BFC695261EA5B7100049A44E /* BlackCardNames.txt */,
 				BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */,
 				02C378931EA8820A005ADDFB /* BlackCardAmount.txt */,
-				BFC7E6721EB87A4300F70550 /* Backgrounds */,
-				02C3789B1EB1734E005ADDFB /* CardSelectors */,
-				02C378851EA583EA005ADDFB /* CAH_Images */,
 				BF34CAC31EA47ED5005A2C48 /* MessagesViewController.swift */,
 				BF34CAC51EA47ED5005A2C48 /* MainInterface.storyboard */,
 				BFC6952C1EA5D9390049A44E /* CAHModel.swift */,
 				BFBA4D7F1EB5E1F3004E5D05 /* URLDecoder.swift */,
 				02C3788D1EA8691E005ADDFB /* GameViewController.swift */,
+				BFC7E6771EB9646C00F70550 /* WaitingScene.swift */,
 				02C3788F1EA86A2E005ADDFB /* Card.swift */,
 				02C378911EA86BCE005ADDFB /* CardImageLoader.swift */,
+				BFC7E6721EB87A4300F70550 /* Backgrounds */,
+				02C3789B1EB1734E005ADDFB /* CardSelectors */,
 				BF34CAC81EA47ED5005A2C48 /* Assets.xcassets */,
 				BF34CACA1EA47ED5005A2C48 /* Info.plist */,
 			);
@@ -234,7 +234,6 @@
 				BFC7E6741EB95AE400F70550 /* Backgrounds in Resources */,
 				BF34CAB51EA47ED5005A2C48 /* Assets.xcassets in Resources */,
 				BFC695271EA5B7100049A44E /* BlackCardNames.txt in Resources */,
-				02C378861EA583EA005ADDFB /* CAH_Images in Resources */,
 				BFC6952B1EA5B8120049A44E /* WhiteCardNames.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,6 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFC7E6781EB9646C00F70550 /* WaitingScene.swift in Sources */,
 				BFC6952D1EA5D9390049A44E /* CAHModel.swift in Sources */,
 				02C3788E1EA8691E005ADDFB /* GameViewController.swift in Sources */,
 				BFBA4D801EB5E1F3004E5D05 /* URLDecoder.swift in Sources */,

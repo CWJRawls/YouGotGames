@@ -16,14 +16,17 @@ class GameViewController : UIViewController {
     var scene : SKScene? //scene that will dominate the frame, either history / judging / playing / waiting / winning
 
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let scene = WaitingScene(size: view.bounds.size)
+        let skView = view as! SKView
+        skView.presentScene(scene)
         
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 

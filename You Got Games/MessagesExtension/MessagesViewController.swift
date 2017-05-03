@@ -156,7 +156,24 @@ class MessagesViewController: MSMessagesAppViewController {
                 
                 guard let game = decoder.getGame() else {fatalError("Corrupt Game State URL")}
                 
+                guard let controller = storyboard?.instantiateViewController(withIdentifier: "gameView") as? GameViewController else {fatalError("Unable to Create ViewController")}
                 
+                controller.sceneType = SceneType.waiting
+                
+                addChildViewController(controller)
+                
+                controller.view.frame = view.bounds
+                
+                view.addSubview(controller.view)
+                
+                NSLayoutConstraint.activate([
+                    controller.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    controller.view.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    controller.view.topAnchor.constraint(equalTo: view.topAnchor),
+                    controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    ])
+                
+                controller.didMove(toParentViewController: self)
             }
             
         }
