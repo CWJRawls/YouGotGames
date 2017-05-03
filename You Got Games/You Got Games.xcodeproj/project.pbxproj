@@ -24,6 +24,9 @@
 		BFC6952B1EA5B8120049A44E /* WhiteCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */; };
 		BFC6952D1EA5D9390049A44E /* CAHModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC6952C1EA5D9390049A44E /* CAHModel.swift */; };
 		BFC7E6731EB87A4300F70550 /* Backgrounds in Resources */ = {isa = PBXBuildFile; fileRef = BFC7E6721EB87A4300F70550 /* Backgrounds */; };
+		BFC7E6741EB95AE400F70550 /* Backgrounds in Resources */ = {isa = PBXBuildFile; fileRef = BFC7E6721EB87A4300F70550 /* Backgrounds */; };
+		BFC7E6751EB95AE900F70550 /* CardSelectors in Resources */ = {isa = PBXBuildFile; fileRef = 02C3789B1EB1734E005ADDFB /* CardSelectors */; };
+		BFC7E6761EB95AEF00F70550 /* BlackCardAmount.txt in Resources */ = {isa = PBXBuildFile; fileRef = 02C378931EA8820A005ADDFB /* BlackCardAmount.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,6 +229,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFC7E6761EB95AEF00F70550 /* BlackCardAmount.txt in Resources */,
+				BFC7E6751EB95AE900F70550 /* CardSelectors in Resources */,
+				BFC7E6741EB95AE400F70550 /* Backgrounds in Resources */,
 				BF34CAB51EA47ED5005A2C48 /* Assets.xcassets in Resources */,
 				BFC695271EA5B7100049A44E /* BlackCardNames.txt in Resources */,
 				02C378861EA583EA005ADDFB /* CAH_Images in Resources */,

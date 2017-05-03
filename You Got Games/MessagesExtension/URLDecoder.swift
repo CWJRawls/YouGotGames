@@ -256,7 +256,6 @@ class URLDecoder {
             //create the new game if all of the parts are valid (except for the optionals)
             if let whiteDeck = wDeck, let blackDeck = bDeck {
                 if players.count > 0 && currentPlayer != -1 && judgeIdx != -1 {
-                    Swift.print("Creating game from parsed URL")
                     
                     game = Game(players: players, wCards: whiteDeck, bCards: blackDeck, uCards: usedCards, cPlayer: currentPlayer, jPlayer: judgeIdx, currentGoal: blackCard, history: history)
                     
