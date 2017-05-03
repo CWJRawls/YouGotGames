@@ -34,7 +34,32 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     @IBAction func createGame(_ sender: UIButton) {
-        Swift.print("will create new game")
+        
+        guard let conversation = activeConversation else {fatalError("No Active Conversation Found")}
+        
+        let myID = conversation.localParticipantIdentifier
+        
+        let remoteIDs = conversation.remoteParticipantIdentifiers
+        
+        var allIDs = [UUID]()
+        
+        allIDs.append(myID)
+        allIDs.append(contentsOf: remoteIDs)
+        
+        let game = Game(humanPlayers: allIDs, botCount: botCount)
+        
+        let gameURL = game.prepareURL()
+        
+        let message = MSMessage()
+        
+        let layout = MSMessageTemplateLayout()
+        layout.caption = "Let's Play Cards Against Humanity"
+        
+        message.layout = layout
+        message.url = gameURL
+        
+        conversation.insert(message, completionHandler: {(error) in if let error = error { Swift.print(error)}})
+        
     }
     
     
@@ -58,28 +83,6 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Use this method to configure the extension and restore previously stored state.
         super.willBecomeActive(with: conversation)
-        
-        //guard let conversation = activeConversation else {fatalError("No Active Conversation")}
-        /*
-        let myID = conversation.localParticipantIdentifier
-        
-        let remoteIDs = conversation.remoteParticipantIdentifiers
-        
-        var allIDs = [UUID]()
-        
-        allIDs.append(myID)
-        allIDs.append(contentsOf: remoteIDs)
-        
-        botLabel.text = "Bots: \(botCount)"
-        
-        if allIDs.count < 3 {
-            if botCount < 1 {
-                botCount = 1
-                botLabel.text = "Bots: 1"
-            }
-            
-            minimumBots = 1
-        } */
         
         presentViewController(for: conversation, with: presentationStyle)
     }

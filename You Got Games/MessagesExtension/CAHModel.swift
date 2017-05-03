@@ -150,31 +150,31 @@ class Game {
         let wDeckItem = URLQueryItem(name: "deck", value: wDeck.getCardString())
         let wDeckDiscard = URLQueryItem(name: "discard", value: wDeck.getDiscardString())
         
-        queryItems.append(deckBegin)
-        queryItems.append(wDeckType)
-        queryItems.append(wDeckItem)
-        queryItems.append(wDeckDiscard)
-        queryItems.append(deckEnd)
+        components.queryItems = [deckBegin]
+        components.queryItems?.append(wDeckType)
+        components.queryItems?.append(wDeckItem)
+        components.queryItems?.append(wDeckDiscard)
+        components.queryItems?.append(deckEnd)
         
         let bDeckType = URLQueryItem(name: "deck_type", value: bDeck.getTypeString())
         let bDeckItem = URLQueryItem(name: "deck", value: bDeck.getCardString())
         
-        queryItems.append(deckBegin)
-        queryItems.append(bDeckType)
-        queryItems.append(bDeckItem)
-        queryItems.append(deckEnd)
+        components.queryItems?.append(deckBegin)
+        components.queryItems?.append(bDeckType)
+        components.queryItems?.append(bDeckItem)
+        components.queryItems?.append(deckEnd)
         
         //get the judge index
         let judgePlayer = URLQueryItem(name: "judge_index", value: "\(judgeIdx)")
-        queryItems.append(judgePlayer)
+        components.queryItems?.append(judgePlayer)
         
         //get the current player index
         let currentPlayer = URLQueryItem(name: "current_player", value: "\(self.currentPlayer)")
-        queryItems.append(currentPlayer)
+        components.queryItems?.append(currentPlayer)
         
         //get the current black card
         let myBlackCard = URLQueryItem(name: "black_card", value: "\(blackCard)")
-        queryItems.append(myBlackCard)
+        components.queryItems?.append(myBlackCard)
         
         //get any white cards that have been played so far this round
         if let playedCards = usedCards {
@@ -185,10 +185,10 @@ class Game {
                 let uPlayer = URLQueryItem(name: "card_player", value: element.getPlayerString())
                 let usedCardEnd = URLQueryItem(name: "usedCardEnd", value: "1")
                 
-                queryItems.append(usedCardBegin)
-                queryItems.append(uCard)
-                queryItems.append(uPlayer)
-                queryItems.append(usedCardEnd)
+                components.queryItems?.append(usedCardBegin)
+                components.queryItems?.append(uCard)
+                components.queryItems?.append(uPlayer)
+                components.queryItems?.append(usedCardEnd)
             }
             
         }
@@ -200,9 +200,9 @@ class Game {
             let players = URLQueryItem(name: "players", value: history.getPlayersString())
             let histBCard = URLQueryItem(name: "blackCard", value: history.getBlackCardString())
             
-            queryItems.append(historyBegin)
-            queryItems.append(players)
-            queryItems.append(histBCard)
+            components.queryItems?.append(historyBegin)
+            components.queryItems?.append(players)
+            components.queryItems?.append(histBCard)
             
             for ucard in history.usedCards {
                
@@ -211,15 +211,15 @@ class Game {
                 let uPlayer = URLQueryItem(name: "card_player", value: ucard.getPlayerString())
                 let usedCardEnd = URLQueryItem(name: "usedCardEnd", value: "1")
                 
-                queryItems.append(usedCardBegin)
-                queryItems.append(uCard)
-                queryItems.append(uPlayer)
-                queryItems.append(usedCardEnd)
+                components.queryItems?.append(usedCardBegin)
+                components.queryItems?.append(uCard)
+                components.queryItems?.append(uPlayer)
+                components.queryItems?.append(usedCardEnd)
             }
             
             let historyEnd = URLQueryItem(name: "historyEnd", value: "1")
             
-            queryItems.append(historyEnd)
+            components.queryItems?.append(historyEnd)
         }
         
         //begin writing player values
@@ -233,20 +233,33 @@ class Game {
             let type = URLQueryItem(name: "type", value: player.getPlayerTypeString())
             let playerEnd = URLQueryItem(name: "playerEnd", value: "1")
             
-            queryItems.append(playerBegin)
-            queryItems.append(name)
-            queryItems.append(id)
-            queryItems.append(hand)
-            queryItems.append(wins)
-            queryItems.append(type)
-            queryItems.append(playerEnd)
+            components.queryItems?.append(playerBegin)
+            components.queryItems?.append(name)
+            components.queryItems?.append(id)
+            components.queryItems?.append(hand)
+            components.queryItems?.append(wins)
+            components.queryItems?.append(type)
+            components.queryItems?.append(playerEnd)
         }
         
+        let countStr = "Item Count: \(components.queryItems?.count)"
+        Swift.print(countStr)
+        
+        
+        
         //append all of our items to the components object
-        components.queryItems?.append(contentsOf: queryItems)
+        //components.queryItems?.append(contentsOf: queryItems)
+        
+        //for item in queryItems {
+       //     components.queryItems?.append(item)
+       // }
         
         //then get the url to output
         let outputURL : URL = components.url!
+        
+        
+        Swift.print("\n\n--------------------------------\n\tOUTGOING URL\n")
+        Swift.print(outputURL)
         
         return outputURL
     }
@@ -605,18 +618,22 @@ class Deck {
         }
         
         //"shuffle" by randomly deciding where to move each card to
-        for i in 0...cards.count {
+        for i in 0...(cards.count - 1) {
             
             //come up with the distance to shift by
-            var shift = arc4random_uniform(UInt32(cards.count))
-            shift = shift - UInt32(cards.count / 2)
+            var shift = Int(arc4random_uniform(UInt32(cards.count)))
+            shift = shift - (cards.count / 2)
             
             //calculate the new position of the card in the deck
-            var newPos = i + Int32(shift)
+            var newPos = i + shift
+            
+            if newPos >= cards.count {
+                newPos = newPos % cards.count
+            }
             
             //account for a possible value less than 0
             if(newPos < 0) {
-                newPos = Int32(cards.count) - abs(newPos)
+                newPos = cards.count - abs(newPos)
             }
             
             //swap data between points

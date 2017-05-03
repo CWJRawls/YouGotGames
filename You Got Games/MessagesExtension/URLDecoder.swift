@@ -17,6 +17,8 @@ class URLDecoder {
     
     init(url: URL) {
         self.url = url
+        
+        Swift.print(url)
     }
     
     func decode() {
@@ -40,7 +42,7 @@ class URLDecoder {
             //items for keeping track of deck parts
             var deck_string : String = ""
             var deck_type : String = ""
-            var deck_discard : String?
+            var deck_discard : String? = nil
             
             //items for keeping track of history parts
             var histUsedCards = [UsedCard]()
@@ -131,26 +133,27 @@ class URLDecoder {
                             dCards_int.append(Int(str)!)
                         }
                         
-                        if let discard = deck_discard {
-                            
-                            let discard_str = discard.components(separatedBy: "-")
-                            
-                            var discard_int = [Int]()
-                            
-                            for str in discard_str {
-                                discard_int.append(Int(str)!)
+                        switch dType {
+                        case .black:
+                            bDeck = Deck(type: dType, cards: dCards_int, dCards: nil)
+                        case .white:
+                            if let discard = deck_discard {
+                                if discard != "-1" {
+                                    
+                                    let discard_Strs = discard.components(separatedBy: "-")
+                                    
+                                    var discard_int = [Int]()
+                                    
+                                    for str in discard_Strs {
+                                        discard_int.append(Int(str)!)
+                                    }
+                                    
+                                    wDeck = Deck(type: dType, cards: dCards_int, dCards: discard_int)
+                                    break
+                                }
                             }
                             
-                            wDeck = Deck(type: dType, cards: dCards_int, dCards: discard_int)
-                            
-                        }
-                        else {
-                            if dType == DeckType.white {
-                                wDeck = Deck(type: dType, cards: dCards_int, dCards: nil)
-                            }
-                            else {
-                                bDeck = Deck(type: dType, cards: dCards_int, dCards: nil)
-                            }
+                            wDeck = Deck(type: dType, cards: dCards_int, dCards: nil)
                         }
                         
                         mode = DecodeMode.none
@@ -253,12 +256,20 @@ class URLDecoder {
             //create the new game if all of the parts are valid (except for the optionals)
             if let whiteDeck = wDeck, let blackDeck = bDeck {
                 if players.count > 0 && currentPlayer != -1 && judgeIdx != -1 {
+                    Swift.print("Creating game from parsed URL")
+                    
                     game = Game(players: players, wCards: whiteDeck, bCards: blackDeck, uCards: usedCards, cPlayer: currentPlayer, jPlayer: judgeIdx, currentGoal: blackCard, history: history)
                     
                     for player in (game?.getPlayers())! {
                         player.game = game
                     }
                 }
+                else {
+                    Swift.print("There were no players, or no current player, or no current judge")
+                }
+            }
+            else {
+                Swift.print("A Deck was incomplete")
             }
         }
     }
@@ -276,7 +287,7 @@ class URLDecoder {
     func getGame() -> Game? {
         
         //only temporary
-        return game!
+        return game
     }
 }
 
