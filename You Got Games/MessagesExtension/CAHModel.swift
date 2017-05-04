@@ -20,6 +20,7 @@ class Game {
     private var currentPlayer : Int
     private var blackCard : Int
     private var roundHistory : GameHistory?
+    let cardLoader : CardLoader
     
     static let maxWins : Int = 10
     
@@ -31,6 +32,10 @@ class Game {
         for (index,p) in humanPlayers.enumerated() {
             players.append(Player(id: p, name: "Player \(index)"))
         }
+        
+        let pTemp = players[0]
+        players.remove(at: 0)
+        players.insert(pTemp, at: 1)
         
         //make sure only to execute the loop in the case that there are bots in the game
         if botCount > 0 {
@@ -55,6 +60,8 @@ class Game {
             }
         }
         
+        cardLoader = CardLoader()
+        
     }
     
     //initializer for game in progress
@@ -77,7 +84,9 @@ class Game {
             roundHistory = h
         }
         
+        cardLoader = CardLoader()
     }
+    
     
     
     //function for passing reference to the game object to each of the players so that they can play their cards
@@ -124,6 +133,29 @@ class Game {
             //package the current state as a url and pass it along.
         }
         
+    }
+    
+    
+    //get a specific player by id from the game object, returns nil if there are no matches to the id
+    func getPlayer(id: UUID) -> Player? {
+        
+        let pID_Str = id.uuidString
+        
+        
+        for player in players {
+            Swift.print(player.id.hashValue)
+            if player.id.uuidString == pID_Str {
+                return player
+            }
+        }
+        
+        return nil
+        
+    }
+    
+    //function to retrieve the current black card in play
+    func getCurrentBlackCard() -> Int {
+        return blackCard
     }
     
     //used by in order to get the player array

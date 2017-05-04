@@ -89,12 +89,19 @@ class CardLoader {
         do {
             let path = Bundle.main.path(forResource: "BlackCardAmount", ofType: "txt")
             let contents = try String(contentsOfFile: path!)
+            
+            
             let counts = contents.components(separatedBy: NSCharacterSet.newlines)
             
             cardsPlayed = [Int]()
             
-            for count in counts {
-                cardsPlayed.append(Int(count)!)
+            for (index, count) in counts.enumerated() {
+                
+
+                
+                if index < counts.count - 1 {
+                    cardsPlayed.append(Int(count)!)
+                }
             }
     
         } catch let error {

@@ -27,6 +27,8 @@
 		BFC7E6751EB95AE900F70550 /* CardSelectors in Resources */ = {isa = PBXBuildFile; fileRef = 02C3789B1EB1734E005ADDFB /* CardSelectors */; };
 		BFC7E6761EB95AEF00F70550 /* BlackCardAmount.txt in Resources */ = {isa = PBXBuildFile; fileRef = 02C378931EA8820A005ADDFB /* BlackCardAmount.txt */; };
 		BFC7E6781EB9646C00F70550 /* WaitingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC7E6771EB9646C00F70550 /* WaitingScene.swift */; };
+		BFC7E67B1EBAE3F600F70550 /* BlackCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC695261EA5B7100049A44E /* BlackCardNames.txt */; };
+		BFC7E67C1EBAE3F900F70550 /* WhiteCardNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC6952A1EA5B8120049A44E /* WhiteCardNames.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,7 +244,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFC7E67C1EBAE3F900F70550 /* WhiteCardNames.txt in Resources */,
 				BF34CAC91EA47ED5005A2C48 /* Assets.xcassets in Resources */,
+				BFC7E67B1EBAE3F600F70550 /* BlackCardNames.txt in Resources */,
 				BF34CAC71EA47ED5005A2C48 /* MainInterface.storyboard in Resources */,
 				02C378941EA8820A005ADDFB /* BlackCardAmount.txt in Resources */,
 				02C3789C1EB1734E005ADDFB /* CardSelectors in Resources */,

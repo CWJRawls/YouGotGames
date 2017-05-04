@@ -14,12 +14,15 @@ class GameViewController : UIViewController {
     
     var sceneType : SceneType = SceneType.waiting //variable for which type of scene should be shown to the player
     var scene : SKScene? //scene that will dominate the frame, either history / judging / playing / waiting / winning
+    var player : Player!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = WaitingScene(size: view.bounds.size)
+        guard let testPlayer = player else {fatalError("Player is nil")}
+        
+        scene = WaitingScene(size: view.bounds.size, player: player)
         let skView = view as! SKView
         skView.presentScene(scene)
         

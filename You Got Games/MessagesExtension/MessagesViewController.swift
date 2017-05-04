@@ -53,7 +53,7 @@ class MessagesViewController: MSMessagesAppViewController {
         let message = MSMessage()
         
         let layout = MSMessageTemplateLayout()
-        layout.caption = "Let's Play Cards Against Humanity"
+        layout.caption = "$\(game.getPlayers()[1].id) Let's Play"// Cards Against Humanity"
         
         message.layout = layout
         message.url = gameURL
@@ -144,6 +144,7 @@ class MessagesViewController: MSMessagesAppViewController {
         //if we are making a new game, then don't do anything
         if presentationStyle != .compact {
             
+            
             let message = conversation.selectedMessage
             
             let gameURL = message?.url
@@ -158,18 +159,30 @@ class MessagesViewController: MSMessagesAppViewController {
                 
                 guard let controller = storyboard?.instantiateViewController(withIdentifier: "gameView") as? GameViewController else {fatalError("Unable to Create ViewController")}
                 
+                Swift.print(conversation.localParticipantIdentifier)
+                
+                Swift.print("\(conversation.localParticipantIdentifier.hashValue)")
+                
+                guard let myPlayer = game.getPlayer(id: conversation.localParticipantIdentifier) else {fatalError("Participant not in game")}
+                
                 controller.sceneType = SceneType.waiting
+                
+                controller.player = myPlayer
                 
                 addChildViewController(controller)
                 
                 controller.view.frame = view.bounds
+                
+                Swift.print(myPlayer.id.uuidString)
+                
+
                 
                 view.addSubview(controller.view)
                 
                 NSLayoutConstraint.activate([
                     controller.view.leftAnchor.constraint(equalTo: view.leftAnchor),
                     controller.view.rightAnchor.constraint(equalTo: view.rightAnchor),
-                    controller.view.topAnchor.constraint(equalTo: view.topAnchor),
+                    controller.view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor),
                     controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                     ])
                 
